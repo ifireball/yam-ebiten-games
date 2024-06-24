@@ -5,8 +5,6 @@ import (
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/ifireball/yam-ebiten-games/resources"
-	"github.com/tdewolff/canvas"
-	"github.com/tdewolff/canvas/renderers/rasterizer"
 )
 
 const (
@@ -14,7 +12,7 @@ const (
 	screenHeight = 1080 / 2
 )
 
-type Game struct{
+type Game struct {
 	Background *ebiten.Image
 }
 
@@ -24,19 +22,11 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 
 func (g *Game) Update(screen *ebiten.Image) error {
 	if g.Background == nil {
-		file, err := resources.Resources.Open("svg/four_trees.svg")
+		image, err := resources.ImageFromSVG("four_trees", screenWidth, screenHeight)
 		if err != nil {
 			return err
 		}
-		defer file.Close()
-
-		cvs, err := canvas.ParseSVG(file)
-		if err != nil {
-			return err
-		}
-		imageBitmap := rasterizer.Draw(cvs, 1.0, canvas.DefaultColorSpace)
-
-		g.Background, _ = ebiten.NewImageFromImage(imageBitmap, ebiten.FilterDefault)
+		g.Background, _ = ebiten.NewImageFromImage(image, ebiten.FilterDefault)
 	}
 	return nil
 }
