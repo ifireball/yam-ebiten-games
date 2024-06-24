@@ -25,15 +25,15 @@
      inkscape:document-units="px"
      showguides="true"
      showgrid="false"
-     inkscape:zoom="1.0100082"
-     inkscape:cx="439.10534"
-     inkscape:cy="252.96824"
+     inkscape:zoom="0.93303299"
+     inkscape:cx="473.18798"
+     inkscape:cy="302.776"
      inkscape:window-width="1920"
-     inkscape:window-height="1007"
-     inkscape:window-x="1920"
-     inkscape:window-y="120"
+     inkscape:window-height="1095"
+     inkscape:window-x="0"
+     inkscape:window-y="32"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer5">
+     inkscape:current-layer="layer3">
     <inkscape:grid
        id="grid4"
        units="px"
@@ -59,12 +59,12 @@
      id="layer1"
      sodipodi:insensitive="true">
     <rect
-       style="display:inline;fill:none;stroke:#808080;stroke-width:1;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="display:inline;fill:none;stroke:#808080;stroke-width:1.02302;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4"
-       width="950"
-       height="520"
-       x="0"
-       y="0"
+       width="958.97815"
+       height="538.97699"
+       x="0.51144105"
+       y="0.51144105"
        inkscape:label="bgguide"
        sodipodi:insensitive="true" />
   </g>
@@ -72,24 +72,23 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="background"
-     sodipodi:insensitive="true"
      style="display:inline">
     <rect
-       style="fill:#99c1f1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:#99c1f1;stroke:none;stroke-width:3.07032;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect15"
-       width="950"
-       height="300"
-       x="0"
+       width="958.20532"
+       height="311.53845"
+       x="1.1336088"
        y="0"
        inkscape:label="sky" />
     <path
        id="rect14"
-       style="fill:#57e389;stroke:none;stroke-width:3.11338;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 621.13196,243.66915 c -21.27944,0.47923 -42.4189,2.73888 -63.01953,6.73633 -34.81936,6.86782 -67.5642,18.60601 -96.48633,34.58789 C 364.01189,252.09238 247.95663,255.51454 155.01868,294.03439 107.28808,280.04754 54.167724,272.65504 0.17492676,272.48556 L -1.1239014,458.28244 0.15539551,458.27074 0,520 h 950 l 0.6554,-164.09647 h -0.0977 v -86.36719 l -0.55859,-1.01562 c -53.27607,2.72804 -104.36077,8.51105 -150.5332,17.04101 -51.38038,-28.55725 -114.23829,-43.32326 -178.33399,-41.89258 z"
+       style="fill:#57e389;stroke:none;stroke-width:3.18636;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 627.63041,253.04104 c -21.46324,0.49766 -42.78529,2.84422 -63.56385,6.99542 -35.1201,7.13197 -68.14776,19.32163 -97.3197,35.91819 C 368.28954,261.78824 251.23189,265.34202 157.49122,305.34341 109.34835,290.8186 55.769189,283.14177 1.3100465,282.96577 L 0,475.90869 1.2903464,475.89654 1.1336088,540 H 959.33894 L 960,369.59213 h -0.0985 v -89.68901 l -0.56341,-1.05468 c -53.73623,2.83296 -105.26215,8.8384 -151.8334,17.69643 -51.82416,-29.6556 -115.22498,-44.98954 -179.87428,-43.50383 z"
        sodipodi:nodetypes="scccccccccccccss" />
     <g
        id="g14"
-       transform="translate(4.2369999,32.479533)"
+       transform="matrix(1.0028599,0,0,1.0384615,5.3949239,33.728746)"
        style="stroke:#2ec27e">
       <path
          style="fill:none;stroke:#2ec27e;stroke-width:3;stroke-linecap:round;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -150,13 +149,12 @@
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="trees"
-     sodipodi:insensitive="true"
      style="display:inline">
     <g
        inkscape:groupmode="layer"
        id="layer3"
        inkscape:label="tree1"
-       transform="translate(-13.92548)">
+       transform="matrix(1.0034497,0,0,0.99999454,-13.665994,0.01942978)">
       <g
          id="g76"
          inkscape:label="canopy1"
@@ -181,7 +179,7 @@
        inkscape:groupmode="layer"
        id="g42"
        inkscape:label="tree2"
-       transform="translate(-57.850956,-2.500005)"
+       transform="matrix(1.0034497,0,0,0.99999454,-57.742996,-2.4805616)"
        style="display:inline">
       <g
          id="g35"
@@ -208,7 +206,7 @@
        inkscape:groupmode="layer"
        id="g82"
        inkscape:label="tree4"
-       transform="translate(-13.92548)"
+       transform="matrix(1.0034497,0,0,0.99999454,-13.665994,0.01942978)"
        style="display:inline">
       <g
          id="g80"
@@ -235,7 +233,7 @@
        inkscape:groupmode="layer"
        id="g79"
        inkscape:label="tree3"
-       transform="translate(-57.850956,-2.500005)"
+       transform="matrix(1.0034497,0,0,0.99999454,-57.742996,-2.4805616)"
        style="display:inline">
       <g
          id="g77"

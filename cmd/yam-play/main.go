@@ -1,13 +1,12 @@
 package main
 
 import (
-	"image"
 	"log"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/ifireball/yam-ebiten-games/resources"
-	"github.com/srwiley/oksvg"
-	"github.com/srwiley/rasterx"
+	"github.com/tdewolff/canvas"
+	"github.com/tdewolff/canvas/renderers/rasterizer"
 )
 
 const (
@@ -30,18 +29,13 @@ func (g *Game) Update(screen *ebiten.Image) error {
 			return err
 		}
 		defer file.Close()
-	
-		imageSvg, err := oksvg.ReadIconStream(file)
+
+		cvs, err := canvas.ParseSVG(file)
 		if err != nil {
 			return err
 		}
-		
-		imageBitmap := image.NewRGBA(image.Rect(0, 0, screenWidth, screenHeight))
-		scannerGV := rasterx.NewScannerGV(screenWidth, screenHeight, imageBitmap, imageBitmap.Bounds())
-		dasher := rasterx.NewDasher(screenWidth, screenHeight, scannerGV)
-		//imageSvg.Transform = imageSvg.Transform.Scale(0.5, 0.5)
-		imageSvg.Draw(dasher, 1.0)
-		
+		imageBitmap := rasterizer.Draw(cvs, 1.0, canvas.DefaultColorSpace)
+
 		g.Background, _ = ebiten.NewImageFromImage(imageBitmap, ebiten.FilterDefault)
 	}
 	return nil
