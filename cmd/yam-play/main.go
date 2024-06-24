@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/hajimehoshi/ebiten"
+	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
@@ -14,6 +15,7 @@ const (
 
 type Game struct {
 	Background *ebiten.Image
+	Girl fourtrees.Girl
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -28,11 +30,12 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		}
 		g.Background, _ = ebiten.NewImageFromImage(image, ebiten.FilterDefault)
 	}
-	return nil
+	return g.Girl.Update(screen)
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(g.Background, &ebiten.DrawImageOptions{})
+	g.Girl.Draw(screen)
 }
 
 func main() {
