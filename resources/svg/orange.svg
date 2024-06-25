@@ -24,7 +24,7 @@
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="px"
      inkscape:zoom="3.036"
-     inkscape:cx="124.83531"
+     inkscape:cx="125"
      inkscape:cy="125"
      inkscape:window-width="1920"
      inkscape:window-height="1007"
@@ -38,13 +38,6 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <rect
-       style="display:none;fill:#2ec27e;stroke:#e5a50a;stroke-width:0.2;stroke-linecap:round"
-       id="rect1"
-       width="250"
-       height="250"
-       x="0"
-       y="0" />
     <g
        id="g5"
        transform="translate(-0.02902222,2.7700334)">
