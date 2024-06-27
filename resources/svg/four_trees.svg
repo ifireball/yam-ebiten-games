@@ -51,24 +51,39 @@
        gridanglez="30"
        visible="false" />
     <sodipodi:guide
-       position="192.91922,26.620511"
+       position="247.7351,580.52051"
        orientation="1,0"
        id="guide1"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="384.67614,28.458762"
+       position="427.79592,582.00689"
        orientation="1,0"
        id="guide2"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="576.61412,30.907604"
+       position="697.18131,577.64941"
        orientation="1,0"
        id="guide3"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="768.46157,35.194698"
+       position="887.37165,616.16231"
        orientation="1,0"
        id="guide4"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="74.305091,565.84355"
+       orientation="1,0"
+       id="guide5"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="1017.2881,502.42048"
+       orientation="0,-1"
+       id="guide6"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="40.727392,341.72191"
+       orientation="0,-1"
+       id="guide7"
        inkscape:locked="false" />
   </sodipodi:namedview>
   <defs

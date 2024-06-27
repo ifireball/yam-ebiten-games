@@ -44,13 +44,12 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 	return nil
 }
 
-func (f *Fruit) loadImages() error {
+func (f *Fruit) loadImages() (err error) {
 	for i := 0; i < kinds; i++ {
-		image, err := resources.ImageFromSVG(imageNames[i], fruitWidth, fruitHeight)
+		f.images[i], err = resources.EbitenImageFromSVG(imageNames[i], fruitWidth, fruitHeight)
 		if err != nil {
 			return err
 		}
-		f.images[i], _ = ebiten.NewImageFromImage(image, ebiten.FilterDefault)
 	}
 	return nil
 }

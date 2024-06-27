@@ -18,12 +18,12 @@ type Girl struct {
 }
 
 func (g *Girl) Update(screen *ebiten.Image) error {
+	var err error
 	if g.sprite == nil {
-		image, err := resources.ImageFromSVG("basket_girl", girlWidth, girlHeight)
+		g.sprite, err = resources.EbitenImageFromSVG("basket_girl", girlWidth, girlHeight)
 		if err != nil {
 			return err
 		}
-		g.sprite, _ = ebiten.NewImageFromImage(image, ebiten.FilterDefault)
 
 		w, h := screen.Size()
 		fmt.Printf("Girl screen size: %v %v\n", w, h)

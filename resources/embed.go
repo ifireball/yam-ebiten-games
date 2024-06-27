@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image"
 
+	"github.com/hajimehoshi/ebiten"
 	"github.com/tdewolff/canvas"
 	"github.com/tdewolff/canvas/renderers/rasterizer"
 )
@@ -30,4 +31,12 @@ func ImageFromSVG(svgName string, w, h int) (image.Image, error) {
 	cvs.Clip(canvas.Rect{X: 0, Y: 0, W: float64(w), H: float64(h)})
 	image := rasterizer.Draw(cvs, 1.0, canvas.DefaultColorSpace)
 	return image, nil
+}
+
+func EbitenImageFromSVG(svgName string, w, h int) (*ebiten.Image, error) {
+	image, err := ImageFromSVG(svgName, w, h)
+	if err != nil {
+		return nil, err
+	}
+	return ebiten.NewImageFromImage(image, ebiten.FilterDefault)
 }

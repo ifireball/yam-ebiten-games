@@ -24,12 +24,12 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
+	var err error
 	if g.Background == nil {
-		image, err := resources.ImageFromSVG("four_trees", screenWidth, screenHeight)
+		g.Background, err = resources.EbitenImageFromSVG("four_trees", screenWidth, screenHeight)
 		if err != nil {
 			return err
 		}
-		g.Background, _ = ebiten.NewImageFromImage(image, ebiten.FilterDefault)
 	}
 	if err := g.Girl.Update(screen); err != nil {
 		return err
