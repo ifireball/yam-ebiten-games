@@ -9,7 +9,7 @@ import (
 
 const (
 	kinds = 4
-	amount = 20
+	amount = 40
 
 	fruitWidth = 25 * 2 * 3 / 4
 	fruitHeight = 25 * 2 * 3 / 4
