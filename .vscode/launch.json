@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Authoring tool",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "cmd/author"
+        },
+        {
             "name": "Launch Game",
             "type": "go",
             "request": "launch",
