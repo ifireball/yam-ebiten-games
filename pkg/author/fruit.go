@@ -28,7 +28,7 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 	}
 
 	f.mouse.UpdateGeoM()
-	f.mouse.UpdateDrag()
+	//f.mouse.UpdateDrag()
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 		if loc := f.findLocationAtMouse(); loc != nil {
 			f.mouse.StartDrag(&loc.position)
@@ -63,6 +63,8 @@ func (f *Fruit) findLocationAtMouse() *Location {
 }
 
 func (f *Fruit) Draw(screen *ebiten.Image) {
+	f.mouse.UpdateGeoM()
+	f.mouse.UpdateDrag()
 	dio := ebiten.DrawImageOptions{}
 	for i := 0; i < len(f.locations); i++ {
 		dio.GeoM = f.locations[i].position
