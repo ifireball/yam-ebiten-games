@@ -15,9 +15,7 @@ type Fruit struct {
 	initialized bool
 	locations   []Location
 	images      fruit.Images
-	dragging 	bool
-	draggedLocation int
-	draggedOffset ebiten.GeoM
+	mouse 		Mouse
 }
 
 func (f *Fruit) Update(screen *ebiten.Image) error {
@@ -29,53 +27,39 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 		f.initialized = true
 	}
 
-	if f.dragging {
-		x, y := ebiten.CursorPosition()
-		ox, oy := f.draggedOffset.Apply(float64(x), float64(y))
-		f.setLocation(f.draggedLocation, int(ox), int(oy))
-	}
+	f.mouse.UpdateGeoM()
+	f.mouse.UpdateDrag()
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-		if loc, ofs, found := f.findLocationAt(ebiten.CursorPosition()); found {
-			f.dragging = true
-			f.draggedLocation = loc
-			f.draggedOffset = ofs
+		if loc := f.findLocationAtMouse(); loc != nil {
+			f.mouse.StartDrag(&loc.position)
 		}
 	}
 	if inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft) {
-		if f.dragging {
-			f.dragging = false
-			f.draggedLocation = -1
+		if f.mouse.IsDragging() {
+			f.mouse.Drop()
 		} else {
-			f.addLocation(ebiten.CursorPosition())
+			f.addLocationAtMouse()
 		}
 	}
 
 	return nil
 }
 
-func (f *Fruit) addLocation(x, y int) {
+func (f *Fruit) addLocationAtMouse() {
 	var l Location
-	l.position.Translate(float64(x), float64(y))
+	l.position = f.mouse.GeoM
 	l.position.Translate(-float64(fruit.Width)/2, -float64(fruit.Height)/2)
 	f.locations = append(f.locations, l)
 }
 
-func (f *Fruit) findLocationAt(x, y int) (int, ebiten.GeoM, bool) {
-	for i, loc := range f.locations {
-		ax, ay := loc.position.Apply(-float64(x), -float64(y))
-		if -fruit.Width <= ax && ax <= 0 && -fruit.Height <= ay && ay <= 0 {
-			ofs := loc.position
-			ofs.Translate(-float64(x), -float64(y))
-			return i, ofs, true
+func (f *Fruit) findLocationAtMouse() *Location {
+	for i := range f.locations {
+		loc := &f.locations[i]
+		if f.mouse.IsTouchingRect(&loc.position, fruit.Width, fruit.Height) {
+			return loc
 		}
 	}
-	return -1, ebiten.GeoM{}, false
-}
-
-func (f *Fruit) setLocation(locIdx, x, y int) {
-	var geom ebiten.GeoM
-	geom.Translate(float64(x), float64(y))
-	f.locations[locIdx].position = geom
+	return nil
 }
 
 func (f *Fruit) Draw(screen *ebiten.Image) {
