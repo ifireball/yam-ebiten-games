@@ -4,10 +4,11 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/fruit"
+	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 )
 
 type Location struct {
-	position ebiten.GeoM
+	position gmath.Vec2
 	kind     int
 }
 
@@ -27,8 +28,7 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 		f.initialized = true
 	}
 
-	f.mouse.UpdateGeoM()
-	//f.mouse.UpdateDrag()
+	f.mouse.UpdateLocation()
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 		if loc := f.findLocationAtMouse(); loc != nil {
 			f.mouse.StartDrag(&loc.position)
@@ -47,8 +47,8 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 
 func (f *Fruit) addLocationAtMouse() {
 	var l Location
-	l.position = f.mouse.GeoM
-	l.position.Translate(-float64(fruit.Width)/2, -float64(fruit.Height)/2)
+	l.position = f.mouse.Location
+	l.position.Sub(&gmath.Vec2{X: float64(fruit.Width)/2, Y: float64(fruit.Height)/2})
 	f.locations = append(f.locations, l)
 }
 
@@ -63,11 +63,12 @@ func (f *Fruit) findLocationAtMouse() *Location {
 }
 
 func (f *Fruit) Draw(screen *ebiten.Image) {
-	f.mouse.UpdateGeoM()
+	f.mouse.UpdateLocation()
 	f.mouse.UpdateDrag()
 	dio := ebiten.DrawImageOptions{}
 	for i := 0; i < len(f.locations); i++ {
-		dio.GeoM = f.locations[i].position
+		dio.GeoM.Reset()
+		dio.GeoM.Translate(f.locations[i].position.Unwrap())
 		screen.DrawImage(f.images[f.locations[i].kind], &dio)
 	}
 }
