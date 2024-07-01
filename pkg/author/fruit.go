@@ -16,6 +16,7 @@ type Fruit struct {
 	locations   []Location
 	images      fruit.Images
 	mouse 		Mouse
+	addKind		int
 }
 
 func (f *Fruit) Update(screen *ebiten.Image) error {
@@ -39,7 +40,14 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 				})
 			}
 		},
-		OnClick: f.addLocationAt,
+		OnClick: func(mouseLoc *gmath.Vec2) {
+			if loc := f.findLocationAt(mouseLoc); loc != nil {
+				loc.kind = (loc.kind + 1) % fruit.Kinds
+				f.addKind = loc.kind
+			} else {
+				f.addLocationAt(mouseLoc)
+			}
+		},
 	})
 
 	return nil
@@ -49,6 +57,7 @@ func (f *Fruit) addLocationAt(position *gmath.Vec2) {
 	var l Location
 	l.position = *position
 	l.position.Sub(&gmath.Vec2{X: float64(fruit.Width)/2, Y: float64(fruit.Height)/2})
+	l.kind = f.addKind
 	f.locations = append(f.locations, l)
 }
 
