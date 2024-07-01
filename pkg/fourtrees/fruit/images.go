@@ -8,8 +8,8 @@ import (
 const (
 	Kinds = 4
 
-	Width = 25 * 2 * 3 / 4
-	Height = 25 * 2 * 3 / 4
+	Width = 25 * 3 * 3 / 4
+	Height = 25 * 3 * 3 / 4
 )
 
 var imageNames = [Kinds]string{"orange", "lemon", "apple", "pear"}
