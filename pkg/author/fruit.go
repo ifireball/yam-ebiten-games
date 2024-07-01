@@ -30,7 +30,13 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 	f.mouse.Update(MouseUpdateHandlers{
 		OnDragStart: func(mouseLoc *gmath.Vec2, setDraggedLoc func(draggedLoc *gmath.Vec2, onDrop func())) {
 			if loc := f.findLocationAt(mouseLoc); loc != nil {
-				setDraggedLoc(&loc.position, nil)
+				originalPos := loc.position
+				setDraggedLoc(&loc.position, func() {
+					// Prevent dragging fruit off the screen
+					if !loc.position.InImageRect(screen.Bounds()) {
+						loc.position = originalPos
+					}
+				})
 			}
 		},
 		OnClick: f.addLocationAt,

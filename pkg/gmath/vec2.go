@@ -1,6 +1,8 @@
 package gmath
 
 import (
+	"image"
+
 	"github.com/hajimehoshi/ebiten"
 )
 
@@ -39,4 +41,9 @@ func (v *Vec2) ApplyGeoM(g *ebiten.GeoM) {
 func (v *Vec2) InRect(topLeft *Vec2, w, h float64) bool {
 	return v.X >= topLeft.X && v.X < topLeft.X + w &&
 		v.Y >= topLeft.Y && v.Y < topLeft.Y + h
+}
+
+func (v *Vec2) InImageRect(r image.Rectangle) bool {
+	return v.X >= float64(r.Min.X) && v.X <= float64(r.Max.X) &&
+		v.Y >= float64(r.Min.Y) && v.Y <= float64(r.Max.Y)
 }
