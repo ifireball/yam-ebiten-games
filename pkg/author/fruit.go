@@ -3,17 +3,13 @@ package author
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/fruit"
+	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 )
 
-type Location struct {
-	Position gmath.Vec2
-	Kind     int
-}
-
 type Fruit struct {
 	initialized bool
-	Locations   []Location
+	gdata.Fruit
 	images      fruit.Images
 	mouse       Mouse
 	addKind     int
@@ -54,14 +50,14 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 }
 
 func (f *Fruit) addLocationAt(position *gmath.Vec2) {
-	var l Location
+	var l gdata.Location
 	l.Position = *position
 	l.Position.Sub(&gmath.Vec2{X: float64(fruit.Width) / 2, Y: float64(fruit.Height) / 2})
 	l.Kind = f.addKind
 	f.Locations = append(f.Locations, l)
 }
 
-func (f *Fruit) findLocationAt(position *gmath.Vec2) *Location {
+func (f *Fruit) findLocationAt(position *gmath.Vec2) *gdata.Location {
 	for i := range f.Locations {
 		loc := &f.Locations[i]
 		if position.InRect(&loc.Position, fruit.Width, fruit.Height) {
