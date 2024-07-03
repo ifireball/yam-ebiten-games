@@ -1,0 +1,125 @@
+{
+    "Fruit": {
+        "Locations": [
+            {
+                "Position": {
+                    "X": 59,
+                    "Y": 183
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 93,
+                    "Y": 108
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 142,
+                    "Y": 47
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 215,
+                    "Y": 33
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 289,
+                    "Y": 49
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 160,
+                    "Y": 123
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 233,
+                    "Y": 114
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 277,
+                    "Y": 184
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 148,
+                    "Y": 197
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 213,
+                    "Y": 220
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 116,
+                    "Y": 293
+                },
+                "Kind": 0
+            },
+            {
+                "Position": {
+                    "X": 378,
+                    "Y": 134
+                },
+                "Kind": 1
+            },
+            {
+                "Position": {
+                    "X": 409,
+                    "Y": 88
+                },
+                "Kind": 1
+            },
+            {
+                "Position": {
+                    "X": 453,
+                    "Y": 46
+                },
+                "Kind": 1
+            },
+            {
+                "Position": {
+                    "X": 374,
+                    "Y": 192
+                },
+                "Kind": 1
+            },
+            {
+                "Position": {
+                    "X": 673,
+                    "Y": 70
+                },
+                "Kind": 2
+            },
+            {
+                "Position": {
+                    "X": 738,
+                    "Y": 39
+                },
+                "Kind": 2
+            }
+        ]
+    }
+}

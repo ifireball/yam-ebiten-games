@@ -7,16 +7,16 @@ import (
 )
 
 type Location struct {
-	position gmath.Vec2
-	kind     int
+	Position gmath.Vec2
+	Kind     int
 }
 
 type Fruit struct {
 	initialized bool
-	locations   []Location
+	Locations   []Location
 	images      fruit.Images
-	mouse 		Mouse
-	addKind		int
+	mouse       Mouse
+	addKind     int
 }
 
 func (f *Fruit) Update(screen *ebiten.Image) error {
@@ -31,19 +31,19 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 	f.mouse.Update(MouseUpdateHandlers{
 		OnDragStart: func(mouseLoc *gmath.Vec2, setDraggedLoc func(draggedLoc *gmath.Vec2, onDrop func())) {
 			if loc := f.findLocationAt(mouseLoc); loc != nil {
-				originalPos := loc.position
-				setDraggedLoc(&loc.position, func() {
+				originalPos := loc.Position
+				setDraggedLoc(&loc.Position, func() {
 					// Prevent dragging fruit off the screen
-					if !loc.position.InImageRect(screen.Bounds()) {
-						loc.position = originalPos
+					if !loc.Position.InImageRect(screen.Bounds()) {
+						loc.Position = originalPos
 					}
 				})
 			}
 		},
 		OnClick: func(mouseLoc *gmath.Vec2) {
 			if loc := f.findLocationAt(mouseLoc); loc != nil {
-				loc.kind = (loc.kind + 1) % fruit.Kinds
-				f.addKind = loc.kind
+				loc.Kind = (loc.Kind + 1) % fruit.Kinds
+				f.addKind = loc.Kind
 			} else {
 				f.addLocationAt(mouseLoc)
 			}
@@ -55,16 +55,16 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 
 func (f *Fruit) addLocationAt(position *gmath.Vec2) {
 	var l Location
-	l.position = *position
-	l.position.Sub(&gmath.Vec2{X: float64(fruit.Width)/2, Y: float64(fruit.Height)/2})
-	l.kind = f.addKind
-	f.locations = append(f.locations, l)
+	l.Position = *position
+	l.Position.Sub(&gmath.Vec2{X: float64(fruit.Width) / 2, Y: float64(fruit.Height) / 2})
+	l.Kind = f.addKind
+	f.Locations = append(f.Locations, l)
 }
 
 func (f *Fruit) findLocationAt(position *gmath.Vec2) *Location {
-	for i := range f.locations {
-		loc := &f.locations[i]
-		if position.InRect(&loc.position, fruit.Width, fruit.Height) {
+	for i := range f.Locations {
+		loc := &f.Locations[i]
+		if position.InRect(&loc.Position, fruit.Width, fruit.Height) {
 			return loc
 		}
 	}
@@ -74,9 +74,9 @@ func (f *Fruit) findLocationAt(position *gmath.Vec2) *Location {
 func (f *Fruit) Draw(screen *ebiten.Image) {
 	f.mouse.Draw()
 	dio := ebiten.DrawImageOptions{}
-	for i := 0; i < len(f.locations); i++ {
+	for i := 0; i < len(f.Locations); i++ {
 		dio.GeoM.Reset()
-		dio.GeoM.Translate(f.locations[i].position.Unwrap())
-		screen.DrawImage(f.images[f.locations[i].kind], &dio)
+		dio.GeoM.Translate(f.Locations[i].Position.Unwrap())
+		screen.DrawImage(f.images[f.Locations[i].Kind], &dio)
 	}
 }

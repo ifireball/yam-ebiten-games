@@ -1,7 +1,12 @@
 package main
 
 import (
+	"encoding/json"
+	"errors"
 	"log"
+	"os"
+	"path"
+	"runtime"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/ifireball/yam-ebiten-games/pkg/author"
@@ -14,7 +19,7 @@ const (
 )
 
 type Game struct {
-	Background *ebiten.Image
+	background *ebiten.Image
 	Fruit author.Fruit
 }
 
@@ -24,8 +29,8 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 
 func (g *Game) Update(screen *ebiten.Image) error {
 	var err error
-	if g.Background == nil {
-		g.Background, err = resources.EbitenImageFromSVG("four_trees", screenWidth, screenHeight)
+	if g.background == nil {
+		g.background, err = resources.EbitenImageFromSVG("four_trees", screenWidth, screenHeight)
 		if err != nil {
 			return err
 		}
@@ -34,16 +39,57 @@ func (g *Game) Update(screen *ebiten.Image) error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	screen.DrawImage(g.Background, &ebiten.DrawImageOptions{})
+	screen.DrawImage(g.background, &ebiten.DrawImageOptions{})
 	g.Fruit.Draw(screen)
+}
+
+func DataFilePath() string {
+	_, goFile, _, ok := runtime.Caller(0)
+	if !ok {
+		panic(errors.New("can't locate the data file path"))
+	}
+	return path.Join(path.Dir(path.Dir(path.Dir(goFile))), "resources", "data", "fourtrees.json")
+}
+
+func Load() *Game {
+	var game Game
+	f, err := os.Open(DataFilePath())
+	if errors.Is(err, os.ErrNotExist) {
+		return &game
+	} else if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	dec := json.NewDecoder(f)
+	if err := dec.Decode(&game); err != nil {
+		panic(err)
+	}
+	return &game
+}
+
+func Save(game *Game) {
+	if err := os.MkdirAll(path.Dir(DataFilePath()), 0755); err != nil {
+		panic(err)
+	}
+	f, err := os.Create(DataFilePath())
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+	enc := json.NewEncoder(f)
+	enc.SetIndent("", "    ")
+	if err := enc.Encode(game); err != nil {
+		panic(err)
+	}
 }
 
 func main() {
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("Game authoring")
 
-	game := Game{}
-	if err := ebiten.RunGame(&game); err != nil {
+	game := Load()
+	if err := ebiten.RunGame(game); err != nil {
 		log.Fatal(err)
 	}
+	Save(game)
 }
