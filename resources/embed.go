@@ -2,6 +2,7 @@ package resources
 
 import (
 	"embed"
+	"encoding/json"
 	"fmt"
 	"image"
 
@@ -11,6 +12,7 @@ import (
 )
 
 //go:embed svg
+//go:embed data
 var Resources embed.FS
 
 func ImageFromSVG(svgName string, w, h int) (image.Image, error) {
@@ -39,4 +41,15 @@ func EbitenImageFromSVG(svgName string, w, h int) (*ebiten.Image, error) {
 		return nil, err
 	}
 	return ebiten.NewImageFromImage(image, ebiten.FilterDefault)
+}
+
+func DecodeData(jsonName string, dest interface{}) error {
+	file, err := Resources.Open(fmt.Sprintf("data/%s.json", jsonName))
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	dec := json.NewDecoder(file)
+	return dec.Decode(dest)
 }

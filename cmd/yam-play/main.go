@@ -50,7 +50,10 @@ func main() {
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("Yam Play")
 
-	game := Game{}
+	var game Game
+	if err := resources.DecodeData("fourtrees", &game); err != nil {
+		log.Fatal(err)
+	}
 	if err := ebiten.RunGame(&game); err != nil {
 		log.Fatal(err)
 	}
