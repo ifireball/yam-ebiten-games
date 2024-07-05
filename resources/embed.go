@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"image"
 
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/tdewolff/canvas"
 	"github.com/tdewolff/canvas/renderers/rasterizer"
 )
@@ -40,7 +40,7 @@ func EbitenImageFromSVG(svgName string, w, h int) (*ebiten.Image, error) {
 	if err != nil {
 		return nil, err
 	}
-	return ebiten.NewImageFromImage(image, ebiten.FilterDefault)
+	return ebiten.NewImageFromImage(image), nil
 }
 
 func DecodeData(jsonName string, dest interface{}) error {

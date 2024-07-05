@@ -8,7 +8,7 @@ import (
 	"path"
 	"runtime"
 
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ifireball/yam-ebiten-games/pkg/author"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
@@ -20,14 +20,14 @@ const (
 
 type Game struct {
 	background *ebiten.Image
-	Fruit author.Fruit
+	Fruit      author.Fruit
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return screenWidth, screenHeight
 }
 
-func (g *Game) Update(screen *ebiten.Image) error {
+func (g *Game) Update() error {
 	var err error
 	if g.background == nil {
 		g.background, err = resources.EbitenImageFromSVG("four_trees", screenWidth, screenHeight)
@@ -35,7 +35,7 @@ func (g *Game) Update(screen *ebiten.Image) error {
 			return err
 		}
 	}
-	return g.Fruit.Update(screen)
+	return g.Fruit.Update()
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {

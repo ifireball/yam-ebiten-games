@@ -1,7 +1,7 @@
 package author
 
 import (
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/fruit"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
@@ -10,12 +10,12 @@ import (
 type Fruit struct {
 	initialized bool
 	gdata.Fruit
-	images      fruit.Images
-	mouse       Mouse
-	addKind     int
+	images  fruit.Images
+	mouse   Mouse
+	addKind int
 }
 
-func (f *Fruit) Update(screen *ebiten.Image) error {
+func (f *Fruit) Update() error {
 	if !f.initialized {
 		err := f.images.Load()
 		if err != nil {
@@ -30,7 +30,7 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 				originalPos := loc.Position
 				setDraggedLoc(&loc.Position, func() {
 					// Prevent dragging fruit off the screen
-					if !loc.Position.InImageRect(screen.Bounds()) {
+					if !loc.Position.InRect(0, 0, gdata.ScreenWidth, gdata.ScreenHeight) {
 						loc.Position = originalPos
 					}
 				})
@@ -60,7 +60,7 @@ func (f *Fruit) addLocationAt(position *gmath.Vec2) {
 func (f *Fruit) findLocationAt(position *gmath.Vec2) *gdata.Location {
 	for i := range f.Locations {
 		loc := &f.Locations[i]
-		if position.InRect(&loc.Position, fruit.Width, fruit.Height) {
+		if position.InVecRect(&loc.Position, fruit.Width, fruit.Height) {
 			return loc
 		}
 	}

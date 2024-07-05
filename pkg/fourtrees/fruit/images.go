@@ -1,14 +1,14 @@
 package fruit
 
 import (
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
 const (
 	Kinds = 4
 
-	Width = 25 * 3 * 3 / 4
+	Width  = 25 * 3 * 3 / 4
 	Height = 25 * 3 * 3 / 4
 )
 

@@ -1,9 +1,7 @@
 package fourtrees
 
 import (
-	"fmt"
-
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
@@ -17,22 +15,23 @@ type Girl struct {
 	sprite   *ebiten.Image
 }
 
-func (g *Girl) Update(screen *ebiten.Image) error {
+func (g *Girl) Update() error {
 	var err error
 	if g.sprite == nil {
 		g.sprite, err = resources.EbitenImageFromSVG("basket_girl", girlWidth, girlHeight)
 		if err != nil {
 			return err
 		}
-
-		w, h := screen.Size()
-		fmt.Printf("Girl screen size: %v %v\n", w, h)
 	}
 	switch {
-	case ebiten.IsKeyPressed(ebiten.KeyA): g.position = 0
-	case ebiten.IsKeyPressed(ebiten.KeyF): g.position = 1
-	case ebiten.IsKeyPressed(ebiten.KeyJ): g.position = 2
-	case ebiten.IsKeyPressed(ebiten.KeySemicolon): g.position = 3
+	case ebiten.IsKeyPressed(ebiten.KeyA):
+		g.position = 0
+	case ebiten.IsKeyPressed(ebiten.KeyF):
+		g.position = 1
+	case ebiten.IsKeyPressed(ebiten.KeyJ):
+		g.position = 2
+	case ebiten.IsKeyPressed(ebiten.KeySemicolon):
+		g.position = 3
 	}
 	return nil
 }

@@ -1,7 +1,7 @@
 package fourtrees
 
 import (
-	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/fruit"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 )
@@ -9,10 +9,10 @@ import (
 type Fruit struct {
 	gdata.Fruit
 	initialized bool
-	images fruit.Images
+	images      fruit.Images
 }
 
-func (f *Fruit) Update(screen *ebiten.Image) error {
+func (f *Fruit) Update() error {
 	if !f.initialized {
 		err := f.images.Load()
 		if err != nil {
@@ -25,7 +25,7 @@ func (f *Fruit) Update(screen *ebiten.Image) error {
 
 func (f *Fruit) Draw(screen *ebiten.Image) {
 	dio := ebiten.DrawImageOptions{}
-	for i, _ := range f.Locations {
+	for i := range f.Locations {
 		dio.GeoM.Reset()
 		dio.GeoM.Translate(f.Locations[i].Position.Unwrap())
 		screen.DrawImage(f.images[f.Locations[i].Kind], &dio)
