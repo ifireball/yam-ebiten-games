@@ -38,7 +38,7 @@ func (v *Vec2) ApplyGeoM(g *ebiten.GeoM) {
 	v.X, v.Y = g.Apply(v.X, v.Y)
 }
 
-func (v *Vec2) InBounds(l, t, b, r float64) bool {
+func (v *Vec2) InBounds(l, t, r, b float64) bool {
 	return v.X >= l && v.X < r && v.Y >= t && v.Y < b
 }
 

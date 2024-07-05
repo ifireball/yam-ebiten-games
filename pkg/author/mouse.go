@@ -1,6 +1,7 @@
 package author
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -30,12 +31,15 @@ func (m *Mouse) Update(handlers MouseUpdateHandlers) {
 
 	switch {
 	case inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft):
+		fmt.Println("Mouse pressed")
 		m.pressLocation = location
 	case ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft):
 		if !m.dragStarted && m.pressDistance(location) > 1 {
+			fmt.Println("drag!")
 			m.dragStarted = true
 			if handlers.OnDragStart != nil {
 				handlers.OnDragStart(&m.pressLocation, func(draggedLoc *gmath.Vec2, onDrop func()) {
+					fmt.Println("dragging object!")
 					m.draggedLoc = draggedLoc
 					m.draggedOffset = *draggedLoc
 					m.draggedOffset.Sub(&location)
@@ -44,7 +48,9 @@ func (m *Mouse) Update(handlers MouseUpdateHandlers) {
 			}
 		}
 	case inpututil.IsMouseButtonJustReleased(ebiten.MouseButtonLeft):
+		fmt.Println("Mouse released")
 		if m.dragStarted {
+			fmt.Println("drop!")
 			m.dragStarted = false
 			m.draggedLoc = nil
 			if m.dropFunc != nil {
