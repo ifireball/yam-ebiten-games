@@ -2,6 +2,7 @@ package fourtrees
 
 import (
 	"math"
+	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/fruit"
@@ -48,6 +49,7 @@ func (f *Fruit) Update() error {
 		step := <-f.activeMotion
 		if step.Stop {
 			f.activeTransform.Reset()
+			f.makeActive(rand.Intn(len(f.passive)))
 			//f.active = nil
 			//f.passive = f.Locations
 			go fruitFall(f.active.Position).Run(f.activeMotion)
@@ -80,4 +82,14 @@ func fruitFall(from gmath.Vec2) motion.Motion {
 		Easing: ease.OutBounce,
 	}
 	return motion.Chain(&swing, &drop)
+}
+
+func (f *Fruit) makeActive(idx int) {
+	// Failsafe, do noting if index does not point to a passive location
+	if idx >= len(f.passive) {
+		return
+	}
+	tmp := f.passive[idx]
+	f.passive[idx] = *f.active
+	f.active = &tmp
 }
