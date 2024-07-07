@@ -8,6 +8,7 @@ import (
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/pkg/motion"
+	"github.com/tanema/gween/ease"
 )
 
 type Fruit struct {
@@ -40,7 +41,7 @@ func (f *Fruit) Update() error {
 		f.passive = f.Locations[:len(f.Locations)-1]
 		f.active = &f.Locations[len(f.Locations)-1]
 		f.activeMotion = make(chan motion.Step)
-		go fruitFall().Run(f.activeMotion)
+		go fruitFall(f.active.Position).Run(f.activeMotion)
 		f.initialized = true
 	}
 	if f.active != nil {
@@ -49,7 +50,7 @@ func (f *Fruit) Update() error {
 			f.activeTransform.Reset()
 			//f.active = nil
 			//f.passive = f.Locations
-			go fruitFall().Run(f.activeMotion)
+			go fruitFall(f.active.Position).Run(f.activeMotion)
 		} else {
 			f.activeTransform = step.Transform
 		}
@@ -72,7 +73,11 @@ func (f *Fruit) Draw(screen *ebiten.Image) {
 	}
 }
 
-func fruitFall() motion.Motion {
-	cycle := motion.Chain(&swing, motion.Pause(60*3))
-	return motion.Chain(cycle, cycle, cycle, motion.Pause(60))
+func fruitFall(from gmath.Vec2) motion.Motion {
+	drop := motion.Trnaslate{
+		Duration: 180,
+		To: gmath.Vec2{Y: Ground - from.Y - fruit.Height / 2}, 
+		Easing: ease.OutBounce,
+	}
+	return motion.Chain(&swing, &drop)
 }
