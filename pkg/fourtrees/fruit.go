@@ -81,7 +81,13 @@ func fruitFall(from gmath.Vec2) motion.Motion {
 		To: gmath.Vec2{Y: Ground - from.Y - fruit.Height / 2}, 
 		Easing: ease.OutBounce,
 	}
-	return motion.Chain(&swing, &drop)
+	grow := motion.Scale{
+		Duration: 60,
+		To: gmath.Vec2{X: 1, Y: 1},
+		Pivot: gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height / 2},
+		Easing: ease.OutCubic,
+	}
+	return motion.Chain(&swing, &drop, &grow)
 }
 
 func (f *Fruit) makeActive(idx int) {
