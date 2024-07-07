@@ -19,7 +19,7 @@ type Swing struct {
 
 func (s *Swing) Run(out chan<- Step) {
 	var step Step
-	defer lastStep(&step, out)	
+	defer lastStep(out)
 
 	seq := gween.NewSequence(
 		gween.New(s.StartAngle, s.MinAngle, s.Duration/2, ease.InOutQuart),
@@ -29,11 +29,6 @@ func (s *Swing) Run(out chan<- Step) {
 	)
 	
 	s.runSeq(seq, &step, out)
-}
-
-func lastStep(step *Step, out chan<- Step) {
-	step.Stop = true
-	out <- *step
 }
 
 func (s *Swing) runSeq(seq *gween.Sequence, step *Step, out chan<- Step) {

@@ -40,7 +40,7 @@ func (f *Fruit) Update() error {
 		f.passive = f.Locations[:len(f.Locations)-1]
 		f.active = &f.Locations[len(f.Locations)-1]
 		f.activeMotion = make(chan motion.Step)
-		go swing.Run(f.activeMotion)
+		go fruitFall().Run(f.activeMotion)
 		f.initialized = true
 	}
 	if f.active != nil {
@@ -49,7 +49,7 @@ func (f *Fruit) Update() error {
 			f.activeTransform.Reset()
 			//f.active = nil
 			//f.passive = f.Locations
-			go swing.Run(f.activeMotion)
+			go fruitFall().Run(f.activeMotion)
 		} else {
 			f.activeTransform = step.Transform
 		}
@@ -70,4 +70,9 @@ func (f *Fruit) Draw(screen *ebiten.Image) {
 		dio.GeoM.Translate(f.active.Position.Unwrap())
 		screen.DrawImage(f.images[f.active.Kind], &dio)
 	}
+}
+
+func fruitFall() motion.Motion {
+	cycle := motion.Chain(&swing, motion.Pause(60*3))
+	return motion.Chain(cycle, cycle, cycle, motion.Pause(60))
 }
