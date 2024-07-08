@@ -16,7 +16,7 @@ type Fruit struct {
 	gdata.Fruit
 	passive         []gdata.Location
 	active          *gdata.Location
-	activeMotion    chan motion.Step
+	activeMotion    motion.StepFunc
 	activeTransform ebiten.GeoM
 	images          fruit.Images
 	initialized     bool
@@ -41,20 +41,16 @@ func (f *Fruit) Update() error {
 		}
 		f.passive = f.Locations[:len(f.Locations)-1]
 		f.active = &f.Locations[len(f.Locations)-1]
-		f.activeMotion = make(chan motion.Step)
-		go fruitFall(f.active.Position).Run(f.activeMotion)
+		f.activeMotion = fruitFall(f.active.Position).Run()
 		f.initialized = true
 	}
 	if f.active != nil {
-		step := <-f.activeMotion
-		if step.Stop {
+		if !f.activeMotion(&f.activeTransform) {
 			f.activeTransform.Reset()
 			f.makeActive(rand.Intn(len(f.passive)))
 			//f.active = nil
 			//f.passive = f.Locations
-			go fruitFall(f.active.Position).Run(f.activeMotion)
-		} else {
-			f.activeTransform = step.Transform
+			f.activeMotion = fruitFall(f.active.Position).Run()
 		}
 	}
 	return nil

@@ -1,19 +1,26 @@
 package motion
 
+import "github.com/hajimehoshi/ebiten/v2"
+
 type chain []Motion
 
-func (c chain) Run(out chan<- Step) {
-	defer lastStep(out)
-	in := make(chan Step)
-	defer close(in)
+func (c chain) Run() StepFunc {
+	if len(c) <= 0 {
+		return func(*ebiten.GeoM) bool { return false }
+	}
 
-	for _, m := range c {
-		go m.Run(in)
-		for s := range in {
-			if s.Stop {
-				break
+	motionI := 0
+	motionFunc := c[motionI].Run()
+
+	return func(step *ebiten.GeoM) bool {
+		for {
+			if motionFunc(step) {
+				return true
 			}
-			out <- s
+			if motionI++; motionI >= len(c) {
+				return false
+			}
+			motionFunc = c[motionI].Run()
 		}
 	}
 }

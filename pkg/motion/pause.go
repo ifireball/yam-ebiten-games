@@ -1,11 +1,13 @@
 package motion
 
+import "github.com/hajimehoshi/ebiten/v2"
+
 type Pause int
 
-func (p Pause) Run(out chan<- Step) {
-	defer lastStep(out)
-	var step Step
-	for i := 0; i < int(p); i++ {
-		out <- step
+func (p Pause) Run() StepFunc {
+	i := -1
+	return func(*ebiten.GeoM) bool { 
+		i++
+		return i < int(p)
 	}
 }
