@@ -72,18 +72,19 @@ func (f *Fruit) Draw(screen *ebiten.Image) {
 }
 
 func fruitFall(from gmath.Vec2) motion.Motion {
-	drop := motion.Trnaslate{
-		Duration: 180,
-		To: gmath.Vec2{Y: Ground - from.Y - fruit.Height / 2}, 
-		Easing: ease.OutBounce,
-	}
-	grow := motion.Scale{
-		Duration: 60,
-		To: gmath.Vec2{X: 1, Y: 1},
-		Pivot: gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height / 2},
-		Easing: ease.OutCubic,
-	}
-	return motion.Chain(&swing, &drop, &grow)
+	ground := gmath.Vec2{Y: Ground - from.Y - fruit.Height/2}
+	normalSize := gmath.Vec2{X: 1, Y: 1}
+	squished := gmath.Vec2{X: 0.5, Y: 0}
+	fruitCenter := gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height / 2}
+	fruitBottom := gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height}
+
+	drop := motion.Trnaslate{Duration: 180, To: ground, Easing: ease.OutBounce}
+	grow := motion.Scale{Duration: 60, To: normalSize, Pivot: fruitCenter, Easing: ease.OutCubic}
+	rot := motion.Combine(
+		&motion.Scale{Duration: 60, From: normalSize, To: squished, Pivot: fruitBottom, Easing: ease.OutCubic},
+		motion.PlaceAt(ground),
+	)
+	return motion.Chain(&swing, &drop, &rot, &grow)
 }
 
 func (f *Fruit) makeActive(idx int) {
