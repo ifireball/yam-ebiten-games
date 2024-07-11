@@ -2,12 +2,18 @@ package fourtrees
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
 const (
 	girlWidth  = 100 * 2 * 3 / 4
 	girlHeight = 150 * 2 * 3 / 4
+
+	girlSpeed = 10
+
+	minPosition = girlWidth/2
+	maxPosition = gdata.ScreenWidth - girlWidth/2
 )
 
 type Girl struct {
@@ -23,23 +29,28 @@ func (g *Girl) Update() error {
 			return err
 		}
 	}
+	if g.position == 0 {
+		g.position = gdata.ScreenWidth / 2
+	}
+
 	switch {
-	case ebiten.IsKeyPressed(ebiten.KeyA):
-		g.position = 0
 	case ebiten.IsKeyPressed(ebiten.KeyF):
-		g.position = 1
+		g.position = g.position - girlSpeed
 	case ebiten.IsKeyPressed(ebiten.KeyJ):
-		g.position = 2
-	case ebiten.IsKeyPressed(ebiten.KeySemicolon):
-		g.position = 3
+		g.position = g.position + girlSpeed
+	}
+	if g.position < minPosition {
+		g.position = minPosition
+	}
+	if g.position > maxPosition {
+		g.position = maxPosition
 	}
 	return nil
 }
 
 func (g *Girl) Draw(screen *ebiten.Image) {
-	screenW, screenH := screen.Size()
-	middle := screenW * (g.position + 1) / 5
-	bottom := screenH * 17 / 20
+	middle := g.position
+	bottom := gdata.ScreenHeight * 17 / 20
 	top := bottom - girlHeight
 	left := middle - girlWidth/2
 	dio := ebiten.DrawImageOptions{}
