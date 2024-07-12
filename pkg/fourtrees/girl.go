@@ -3,6 +3,7 @@ package fourtrees
 import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
+	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
@@ -10,14 +11,24 @@ const (
 	girlWidth  = 100 * 2 * 3 / 4
 	girlHeight = 150 * 2 * 3 / 4
 
+	girlBasketTop = 2 * 2 * 3 / 4
+	girlBasketBottom = 20 * 2 * 3 / 4
+	girlBasketWidth = 88 * 2 * 3 / 4
+
 	girlSpeed = 10
 
 	minPosition = girlWidth/2
 	maxPosition = gdata.ScreenWidth - girlWidth/2
+
+	screenGirlBottom = gdata.ScreenHeight * 17 / 20
+	screenGirlTop = screenGirlBottom - girlHeight
+
+	screenBasketTop = screenGirlTop + girlBasketTop
+	screenBasketBottom = screenGirlTop + girlBasketBottom
 )
 
 type Girl struct {
-	position int
+	position float64
 	sprite   *ebiten.Image
 }
 
@@ -50,10 +61,15 @@ func (g *Girl) Update() error {
 
 func (g *Girl) Draw(screen *ebiten.Image) {
 	middle := g.position
-	bottom := gdata.ScreenHeight * 17 / 20
-	top := bottom - girlHeight
 	left := middle - girlWidth/2
 	dio := ebiten.DrawImageOptions{}
-	dio.GeoM.Translate(float64(left), float64(top))
+	dio.GeoM.Translate(left, screenGirlTop)
 	screen.DrawImage(g.sprite, &dio)
+}
+
+func (g *Girl) GetBasketRect(r *gmath.Rect) {
+	r.TopLeft.X = g.position - girlBasketWidth / 2
+	r.BottomRight.X = g.position + girlBasketWidth / 2
+	r.TopLeft.Y = screenBasketTop
+	r.BottomRight.Y = screenBasketBottom
 }

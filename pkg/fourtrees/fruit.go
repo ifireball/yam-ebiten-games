@@ -20,6 +20,7 @@ type Fruit struct {
 	activeTransform ebiten.GeoM
 	images          fruit.Images
 	initialized     bool
+	activeWin       bool
 }
 
 var (
@@ -31,6 +32,16 @@ var (
 		Duration:   10,
 		Cycles:     1,
 	}
+	win = motion.Combine(
+		&motion.Scale{
+			Pivot:    fruit.Center,
+			From:     gmath.ScaleVec2(1),
+			To:       gmath.ScaleVec2(2),
+			Duration: 2.5 * 60,
+			Easing:   ease.OutQuart,
+		},
+		&motion.Trnaslate{To: gmath.Vec2{Y: -fruit.Height}, Duration: 2.5*60, Easing: ease.OutQuart},
+	)
 )
 
 func (f *Fruit) Update() error {
@@ -46,6 +57,7 @@ func (f *Fruit) Update() error {
 	}
 	if f.active != nil {
 		if !f.activeMotion(&f.activeTransform) {
+			f.activeWin = false
 			f.activeTransform.Reset()
 			f.makeActive(rand.Intn(len(f.passive)))
 			//f.active = nil
@@ -75,11 +87,10 @@ func fruitFall(from gmath.Vec2) motion.Motion {
 	ground := gmath.Vec2{Y: Ground - from.Y - fruit.Height/2}
 	normalSize := gmath.Vec2{X: 1, Y: 1}
 	squished := gmath.Vec2{X: 0.5, Y: 0}
-	fruitCenter := gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height / 2}
 	fruitBottom := gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height}
 
 	drop := motion.Trnaslate{Duration: 180, To: ground, Easing: ease.OutBounce}
-	grow := motion.Scale{Duration: 60, To: normalSize, Pivot: fruitCenter, Easing: ease.OutCubic}
+	grow := motion.Scale{Duration: 60, To: normalSize, Pivot: fruit.Center, Easing: ease.OutCubic}
 	rot := motion.Combine(
 		&motion.Scale{Duration: 60, From: normalSize, To: squished, Pivot: fruitBottom, Easing: ease.OutCubic},
 		motion.PlaceAt(ground),
@@ -95,4 +106,29 @@ func (f *Fruit) makeActive(idx int) {
 	tmp := f.passive[idx]
 	f.passive[idx] = *f.active
 	f.active = &tmp
+}
+
+func (f *Fruit) GetActiveRect(r *gmath.Rect) {
+	r.Zero()
+	if f.active == nil || f.activeWin {
+		// Return zero rect during active win animation so we don't detect the
+		// same collision more then once
+		return
+	}
+	r.TopLeft.ApplyGeoM(&f.activeTransform)
+	r.TopLeft.Add(&f.active.Position)
+	// This is not accurate beucase it does not take scaling and rotation in the
+	// activeTransform into account, but good enough for translation, and simple
+	r.BottomRight = r.TopLeft
+	r.BottomRight.AddPair(fruit.Width, fruit.Height)
+}
+
+func (f *Fruit) SetActiveWin() {
+	if f.active == nil || f.activeWin {
+		return
+	}
+	var stopPosition gmath.Vec2
+	stopPosition.ApplyGeoM(&f.activeTransform)
+	f.activeMotion = motion.Combine(win, motion.PlaceAt(stopPosition)).Run()
+	f.activeWin = true
 }

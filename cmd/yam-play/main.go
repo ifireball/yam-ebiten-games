@@ -8,6 +8,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
+	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
@@ -35,7 +36,19 @@ func (g *Game) Update() error {
 	if err := g.Fruit.Update(); err != nil {
 		return err
 	}
+	g.detectFruitWin()
+
 	return nil
+}
+
+func (g *Game) detectFruitWin() {
+	var basketRect, fruitRect gmath.Rect
+	g.Girl.GetBasketRect(&basketRect)
+	g.Fruit.GetActiveRect(&fruitRect)
+	if fruitRect.Overlap(&basketRect) {
+		fmt.Printf("Caught Fruit!")
+		g.Fruit.SetActiveWin()
+	}
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {

@@ -10,6 +10,14 @@ type Vec2 struct {
 	X, Y float64
 }
 
+func ScaleVec2(scale float64) Vec2 {
+	return Vec2{X: scale, Y: scale}
+}
+
+func (v *Vec2) Zero() {
+	v.X, v.Y = 0, 0
+}
+
 func (v *Vec2) SetInts(x, y int) {
 	v.X, v.Y = float64(x), float64(y)
 }
@@ -23,11 +31,15 @@ func (v *Vec2) Reset() {
 }
 
 func (v *Vec2) Add(v2 *Vec2) {
-	v.X, v.Y = v.X+v2.X, v.Y+v2.Y
+	v.AddPair(v2.X, v2.Y)
+}
+
+func (v *Vec2) AddPair(x, y float64) {
+	v.X, v.Y = v.X + x, v.Y + y
 }
 
 func (v *Vec2) Sub(v2 *Vec2) {
-	v.X, v.Y = v.X-v2.X, v.Y-v2.Y
+	v.AddPair(-v2.X, -v2.Y)
 }
 
 func (v *Vec2) Neg() {

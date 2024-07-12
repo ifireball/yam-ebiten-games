@@ -2,6 +2,7 @@ package fruit
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
@@ -13,6 +14,10 @@ const (
 )
 
 var imageNames = [Kinds]string{"orange", "lemon", "apple", "pear"}
+
+var (
+	Center = gmath.Vec2{X: Width / 2, Y: Height / 2}
+)
 
 type Images [Kinds]*ebiten.Image
 
