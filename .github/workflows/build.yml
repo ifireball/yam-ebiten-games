@@ -1,0 +1,36 @@
+name: Build
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
+
+    - name: Setup Build dependencies
+      uses: awalsh128/cache-apt-pkgs-action@v1.4.2
+      with:
+        packages: >-
+          gcc libc6-dev libgl1-mesa-dev libxcursor-dev libxi-dev
+          libxinerama-dev libxrandr-dev libxxf86vm-dev libasound2-dev
+          pkg-config
+        version: 1
+
+    - name: Build 
+      run: go build -o dist/yam-play.linux.$(uname -m) cmd/yam-play/main.go
+
+    - name: Store Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Linux build
+        path: dist/yam-play.linux.*
