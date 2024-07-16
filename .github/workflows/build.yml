@@ -34,3 +34,22 @@ jobs:
       with:
         name: Linux build
         path: dist/yam-play.linux.*
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: go.mod
+
+    - name: Build 
+      run: go build -o dist\yam-play.windows.x86_64.exe cmd\yam-play\main.go
+
+    - name: Store Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Windows build
+        path: dist\yam-play.windows.*
