@@ -1,6 +1,8 @@
 package keyboard
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 const (
 	WobeeBlue = ebiten.KeyA
@@ -8,3 +10,5 @@ const (
 	WobeeRed = ebiten.KeyJ
 	WobeeGreen = ebiten.KeySemicolon
 )
+
+var WobeeBlueGreen = NewCombo(WobeeBlue, WobeeGreen)
