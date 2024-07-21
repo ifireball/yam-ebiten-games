@@ -4,6 +4,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
+	"github.com/ifireball/yam-ebiten-games/pkg/keyboard"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
@@ -45,9 +46,9 @@ func (g *Girl) Update() error {
 	}
 
 	switch {
-	case ebiten.IsKeyPressed(ebiten.KeyF):
+	case keyboard.IsPressedOneOf(keyboard.WobeeYellow, ebiten.KeyLeft):
 		g.position = g.position - girlSpeed
-	case ebiten.IsKeyPressed(ebiten.KeyJ):
+	case keyboard.IsPressedOneOf(keyboard.WobeeRed, ebiten.KeyRight):
 		g.position = g.position + girlSpeed
 	}
 	if g.position < minPosition {
