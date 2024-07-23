@@ -13,6 +13,7 @@ import (
 
 //go:embed svg
 //go:embed data
+//go:embed ogg
 var Resources embed.FS
 
 func ImageFromSVG(svgName string, w, h int) (image.Image, error) {

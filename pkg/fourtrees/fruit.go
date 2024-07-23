@@ -9,6 +9,7 @@ import (
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/pkg/motion"
+	"github.com/ifireball/yam-ebiten-games/pkg/sound"
 	"github.com/tanema/gween/ease"
 )
 
@@ -21,6 +22,9 @@ type Fruit struct {
 	images          fruit.Images
 	initialized     bool
 	activeWin       bool
+
+	dropSound		sound.Note
+	soundDelay		int
 }
 
 var (
@@ -44,15 +48,19 @@ var (
 	)
 )
 
-func (f *Fruit) Update() error {
+func (f *Fruit) Update() (err error) {
 	if !f.initialized {
-		err := f.images.Load()
-		if err != nil {
-			return err
+		if err = f.images.Load(); err != nil {
+			return
 		}
 		f.passive = f.Locations[:len(f.Locations)-1]
 		f.active = &f.Locations[len(f.Locations)-1]
 		f.activeMotion = fruitFall(f.active.Position).Run()
+
+		if f.dropSound, err = sound.NoteFromRes("drop"); err != nil {
+			return
+		}
+		f.soundDelay = 10
 		f.initialized = true
 	}
 	if f.active != nil {
@@ -63,9 +71,17 @@ func (f *Fruit) Update() error {
 			//f.active = nil
 			//f.passive = f.Locations
 			f.activeMotion = fruitFall(f.active.Position).Run()
+
+			f.soundDelay = 10
 		}
 	}
-	return nil
+	if f.soundDelay >= 0 {
+		f.soundDelay--
+	}
+	if f.soundDelay == 0 {
+		err = f.dropSound.Play()
+	}
+	return
 }
 
 func (f *Fruit) Draw(screen *ebiten.Image) {
