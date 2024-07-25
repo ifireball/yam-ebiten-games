@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/audio/vorbis"
+	"github.com/ifireball/yam-ebiten-games/pkg/motion"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
@@ -64,4 +66,11 @@ func (n *Note) Play() (err error) {
 	}
 	n.player.Play()
 	return
+}
+
+func (n *Note) Run() motion.StepFunc {
+	return func(*ebiten.GeoM) bool {
+		n.Play()
+		return false
+	}
 }

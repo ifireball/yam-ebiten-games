@@ -1,6 +1,7 @@
 package fourtrees
 
 import (
+	"errors"
 	"math"
 	"math/rand"
 
@@ -9,7 +10,6 @@ import (
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/pkg/motion"
-	"github.com/ifireball/yam-ebiten-games/pkg/sound"
 	"github.com/tanema/gween/ease"
 )
 
@@ -20,14 +20,14 @@ type Fruit struct {
 	activeMotion    motion.StepFunc
 	activeTransform ebiten.GeoM
 	images          fruit.Images
+	sounds			fruit.Sounds
 	initialized     bool
 	activeWin       bool
-
-	dropSound		sound.Note
-	soundDelay		int
 }
 
 var (
+	normalSize = gmath.ScaleVec2(1)
+
 	swing = motion.Swing{
 		Pivot:      gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height / 5},
 		MinAngle:   -30 * math.Pi / 180,
@@ -36,31 +36,28 @@ var (
 		Duration:   10,
 		Cycles:     1,
 	}
+	grow = motion.Scale{Duration: 60, To: normalSize, Pivot: fruit.Center, Easing: ease.OutCubic}
 	win = motion.Combine(
 		&motion.Scale{
 			Pivot:    fruit.Center,
-			From:     gmath.ScaleVec2(1),
+			From:     normalSize,
 			To:       gmath.ScaleVec2(2),
 			Duration: 2.5 * 60,
 			Easing:   ease.OutQuart,
 		},
 		&motion.Trnaslate{To: gmath.Vec2{Y: -fruit.Height}, Duration: 2.5*60, Easing: ease.OutQuart},
-	)
+	)	
 )
 
 func (f *Fruit) Update() (err error) {
 	if !f.initialized {
-		if err = f.images.Load(); err != nil {
+		if err = errors.Join(f.images.Load(), f.sounds.Load()); err != nil {
 			return
 		}
 		f.passive = f.Locations[:len(f.Locations)-1]
 		f.active = &f.Locations[len(f.Locations)-1]
-		f.activeMotion = fruitFall(f.active.Position).Run()
+		f.activeMotion = f.fruitFall(f.active.Position).Run()
 
-		if f.dropSound, err = sound.NoteFromRes("drop"); err != nil {
-			return
-		}
-		f.soundDelay = 10
 		f.initialized = true
 	}
 	if f.active != nil {
@@ -70,16 +67,8 @@ func (f *Fruit) Update() (err error) {
 			f.makeActive(rand.Intn(len(f.passive)))
 			//f.active = nil
 			//f.passive = f.Locations
-			f.activeMotion = fruitFall(f.active.Position).Run()
-
-			f.soundDelay = 10
+			f.activeMotion = f.fruitFall(f.active.Position).Run()
 		}
-	}
-	if f.soundDelay >= 0 {
-		f.soundDelay--
-	}
-	if f.soundDelay == 0 {
-		err = f.dropSound.Play()
 	}
 	return
 }
@@ -99,19 +88,17 @@ func (f *Fruit) Draw(screen *ebiten.Image) {
 	}
 }
 
-func fruitFall(from gmath.Vec2) motion.Motion {
+func (f *Fruit) fruitFall(from gmath.Vec2) motion.Motion {
 	ground := gmath.Vec2{Y: Ground - from.Y - fruit.Height/2}
-	normalSize := gmath.Vec2{X: 1, Y: 1}
 	squished := gmath.Vec2{X: 0.5, Y: 0}
 	fruitBottom := gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height}
 
 	drop := motion.Trnaslate{Duration: 180, To: ground, Easing: ease.OutBounce}
-	grow := motion.Scale{Duration: 60, To: normalSize, Pivot: fruit.Center, Easing: ease.OutCubic}
 	rot := motion.Combine(
 		&motion.Scale{Duration: 60, From: normalSize, To: squished, Pivot: fruitBottom, Easing: ease.OutCubic},
 		motion.PlaceAt(ground),
 	)
-	return motion.Chain(&swing, &drop, &rot, &grow)
+	return motion.Chain(&swing, &f.sounds.Drop, &drop, &rot, &f.sounds.Grow, &grow)
 }
 
 func (f *Fruit) makeActive(idx int) {
@@ -145,6 +132,14 @@ func (f *Fruit) SetActiveWin() {
 	}
 	var stopPosition gmath.Vec2
 	stopPosition.ApplyGeoM(&f.activeTransform)
-	f.activeMotion = motion.Combine(win, motion.PlaceAt(stopPosition)).Run()
+	f.activeMotion = f.fruitWin(stopPosition).Run()
 	f.activeWin = true
+}
+
+func (f *Fruit) fruitWin(at gmath.Vec2) motion.Motion {
+	return motion.Chain(
+		motion.Combine(win, motion.PlaceAt(at)),
+		&f.sounds.Grow, 
+		&grow,
+	)
 }
