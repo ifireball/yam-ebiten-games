@@ -13,7 +13,7 @@ const (
 	Height = 25 * 3 * 3 / 4
 )
 
-var imageNames = [Kinds]string{"orange", "lemon", "apple", "pear"}
+var KindNames = [Kinds]string{"orange", "lemon", "apple", "pear"}
 
 var (
 	Center = gmath.Vec2{X: Width / 2, Y: Height / 2}
@@ -23,7 +23,7 @@ type Images [Kinds]*ebiten.Image
 
 func (fi *Images) Load() (err error) {
 	for i := 0; i < Kinds; i++ {
-		fi[i], err = resources.EbitenImageFromSVG(imageNames[i], Width, Height)
+		fi[i], err = resources.EbitenImageFromSVG(KindNames[i], Width, Height)
 		if err != nil {
 			return err
 		}

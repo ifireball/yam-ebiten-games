@@ -138,12 +138,13 @@ func (f *Fruit) SetActiveWin() {
 	}
 	var stopPosition gmath.Vec2
 	stopPosition.ApplyGeoM(&f.activeTransform)
-	f.activeMotion = f.fruitWin(stopPosition).Run()
+	f.activeMotion = f.fruitWin(stopPosition, f.active.Kind).Run()
 	f.activeWin = true
 }
 
-func (f *Fruit) fruitWin(at gmath.Vec2) motion.Motion {
+func (f *Fruit) fruitWin(at gmath.Vec2, kind int) motion.Motion {
 	return motion.Chain(
+		&f.sounds.KindWin[kind],
 		motion.Combine(win, motion.PlaceAt(at)),
 		&f.sounds.Grow, 
 		&grow,
