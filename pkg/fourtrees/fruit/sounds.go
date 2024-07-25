@@ -7,12 +7,15 @@ import (
 )
 
 type Sounds struct {
-	Drop, Grow sound.Note
+	Swing, Drop, Oy, Rot, Grow sound.Note
 }
 
 func (s *Sounds) Load() error {
 	return errors.Join(
+		loadInto(&s.Swing, "swing"),
 		loadInto(&s.Drop, "drop"),
+		loadInto(&s.Oy, "oy"),
+		loadInto(&s.Rot, "rot"),
 		loadInto(&s.Grow, "grow"),
 	)
 }

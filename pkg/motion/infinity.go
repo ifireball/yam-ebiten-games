@@ -2,13 +2,13 @@ package motion
 
 import "github.com/hajimehoshi/ebiten/v2"
 
-type Pause int
+var Infinity = infinity{}
 
-func (p Pause) Run() StepFunc {
-	i := -1
+type infinity struct{}
+
+func (infinity) Run() StepFunc {
 	return func(step *ebiten.GeoM) bool { 
 		step.Reset()
-		i++
-		return i < int(p)
+		return true 
 	}
 }
