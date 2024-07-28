@@ -9,20 +9,6 @@ import (
 )
 
 const (
-	girlWidth  = 100 * 2 * 3 / 4
-	girlHeight = 150 * 2 * 3 / 4
-
-	girlBasketTop = 2 * 2 * 3 / 4
-	girlBasketBottom = 20 * 2 * 3 / 4
-
-	minPosition = girlWidth/2
-	maxPosition = gdata.ScreenWidth - girlWidth/2
-
-	screenGirlBottom = gdata.ScreenHeight * 17 / 20
-	screenGirlTop = screenGirlBottom - girlHeight
-
-	screenBasketTop = screenGirlTop + girlBasketTop
-	screenBasketBottom = screenGirlTop + girlBasketBottom
 )
 
 type Girl struct {
@@ -34,7 +20,7 @@ type Girl struct {
 func (g *Girl) Update() error {
 	var err error
 	if g.sprite == nil {
-		g.sprite, err = resources.EbitenImageFromSVG("basket_girl", girlWidth, girlHeight)
+		g.sprite, err = resources.EbitenImageFromSVG("basket_girl", girl.Width, girl.Height)
 		if err != nil {
 			return err
 		}
@@ -45,26 +31,26 @@ func (g *Girl) Update() error {
 
 	g.Controller.Control(&g.position)
 
-	if g.position < minPosition {
-		g.position = minPosition
+	if g.position < girl.MinPosition {
+		g.position = girl.MinPosition
 	}
-	if g.position > maxPosition {
-		g.position = maxPosition
+	if g.position > girl.MaxPosition {
+		g.position = girl.MaxPosition
 	}
 	return nil
 }
 
 func (g *Girl) Draw(screen *ebiten.Image) {
 	middle := g.position
-	left := middle - girlWidth/2
+	left := middle - girl.Width/2
 	dio := ebiten.DrawImageOptions{}
-	dio.GeoM.Translate(left, screenGirlTop)
+	dio.GeoM.Translate(left, girl.ScreenTop)
 	screen.DrawImage(g.sprite, &dio)
 }
 
 func (g *Girl) GetBasketRect(r *gmath.Rect) {
 	r.TopLeft.X = g.position - girl.BasketWidth / 2
 	r.BottomRight.X = g.position + girl.BasketWidth / 2
-	r.TopLeft.Y = screenBasketTop
-	r.BottomRight.Y = screenBasketBottom
+	r.TopLeft.Y = girl.ScreenBasketTop
+	r.BottomRight.Y = girl.ScreenBasketBottom
 }
