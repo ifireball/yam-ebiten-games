@@ -9,6 +9,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees"
+	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/girl"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/pkg/keyboard"
@@ -36,6 +37,9 @@ func (g *Game) Update() error {
 		if err != nil {
 			return err
 		}
+	}
+	if g.Girl.Controller == nil {
+		g.Girl.Controller = &girl.ArrowKeysCtrl{}
 	}
 
 	keyboard.WobeeBlueGreen.Update()

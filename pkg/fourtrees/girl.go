@@ -2,9 +2,9 @@ package fourtrees
 
 import (
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/girl"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
-	"github.com/ifireball/yam-ebiten-games/pkg/keyboard"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
@@ -15,8 +15,6 @@ const (
 	girlBasketTop = 2 * 2 * 3 / 4
 	girlBasketBottom = 20 * 2 * 3 / 4
 	girlBasketWidth = 88 * 2 * 3 / 4
-
-	girlSpeed = 10
 
 	minPosition = girlWidth/2
 	maxPosition = gdata.ScreenWidth - girlWidth/2
@@ -29,6 +27,7 @@ const (
 )
 
 type Girl struct {
+	Controller girl.Controller
 	position float64
 	sprite   *ebiten.Image
 }
@@ -45,12 +44,8 @@ func (g *Girl) Update() error {
 		g.position = gdata.ScreenWidth / 2
 	}
 
-	switch {
-	case keyboard.IsPressedOneOf(keyboard.WobeeYellow, ebiten.KeyLeft):
-		g.position = g.position - girlSpeed
-	case keyboard.IsPressedOneOf(keyboard.WobeeRed, ebiten.KeyRight):
-		g.position = g.position + girlSpeed
-	}
+	g.Controller.Control(&g.position)
+
 	if g.position < minPosition {
 		g.position = minPosition
 	}
