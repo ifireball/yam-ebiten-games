@@ -14,7 +14,6 @@ const (
 
 	girlBasketTop = 2 * 2 * 3 / 4
 	girlBasketBottom = 20 * 2 * 3 / 4
-	girlBasketWidth = 88 * 2 * 3 / 4
 
 	minPosition = girlWidth/2
 	maxPosition = gdata.ScreenWidth - girlWidth/2
@@ -64,8 +63,8 @@ func (g *Girl) Draw(screen *ebiten.Image) {
 }
 
 func (g *Girl) GetBasketRect(r *gmath.Rect) {
-	r.TopLeft.X = g.position - girlBasketWidth / 2
-	r.BottomRight.X = g.position + girlBasketWidth / 2
+	r.TopLeft.X = g.position - girl.BasketWidth / 2
+	r.BottomRight.X = g.position + girl.BasketWidth / 2
 	r.TopLeft.Y = screenBasketTop
 	r.BottomRight.Y = screenBasketBottom
 }

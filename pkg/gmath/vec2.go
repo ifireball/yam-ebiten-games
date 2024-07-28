@@ -18,6 +18,14 @@ func (v *Vec2) Zero() {
 	v.X, v.Y = 0, 0
 }
 
+func (v *Vec2) IsZero() bool {
+	return v.X == 0 && v.Y == 0
+}
+
+func (v *Vec2) Set(x, y float64) {
+	v.X, v.Y = x, y
+}
+
 func (v *Vec2) SetInts(x, y int) {
 	v.X, v.Y = float64(x), float64(y)
 }

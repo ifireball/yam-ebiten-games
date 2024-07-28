@@ -24,3 +24,12 @@ func (r *Rect) Zero() {
 	r.TopLeft.Zero()
 	r.BottomRight.Zero()
 }
+
+func (r *Rect) IsZero() bool {
+	return r.TopLeft.IsZero() && r.BottomRight.IsZero()
+}
+
+func (rc *Rect) Set(l, t, r, b float64) {
+	rc.TopLeft.Set(l, t)
+	rc.BottomRight.Set(r, b)
+}
