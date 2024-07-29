@@ -39,7 +39,7 @@ func (g *Game) Update() error {
 		}
 	}
 	if g.Girl.Controller == nil {
-		g.Girl.Controller = &girl.AutoCtrl{Fruit: &g.Fruit}
+		g.Girl.Controller = &girl.WobeeCtrl{Fruit: &g.Fruit}
 	}
 
 	keyboard.WobeeBlueGreen.Update()

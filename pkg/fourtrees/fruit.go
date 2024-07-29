@@ -132,6 +132,13 @@ func (f *Fruit) GetActiveRect(r *gmath.Rect) {
 	r.BottomRight.AddPair(fruit.Width, fruit.Height)
 }
 
+func (f *Fruit) GetActiveType() int {
+	if f.active == nil || f.activeWin {
+		return -1
+	}
+	return f.active.Kind
+}
+
 func (f *Fruit) SetActiveWin() {
 	if f.active == nil || f.activeWin {
 		return
