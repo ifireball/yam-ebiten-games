@@ -8,6 +8,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/ifireball/yam-ebiten-games/pkg/entities/buttons"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/girl"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
@@ -24,6 +25,7 @@ type Game struct {
 	Background *ebiten.Image
 	Girl fourtrees.Girl
 	Fruit fourtrees.Fruit
+	Buttons buttons.Colored
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -59,6 +61,10 @@ func (g *Game) Update() error {
 	}
 	g.detectFruitWin()
 
+	if err := g.Buttons.Update(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -76,6 +82,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	screen.DrawImage(g.Background, &ebiten.DrawImageOptions{})
 	g.Girl.Draw(screen)
 	g.Fruit.Draw(screen)
+	g.Buttons.Draw(screen)
 	ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f", ebiten.ActualTPS()))
 }
 
