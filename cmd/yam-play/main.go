@@ -9,8 +9,7 @@ import (
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gerrors"
 	"github.com/ifireball/yam-ebiten-games/pkg/gstate"
-	"github.com/ifireball/yam-ebiten-games/pkg/scenerules"
-	"github.com/ifireball/yam-ebiten-games/resources"
+	"github.com/ifireball/yam-ebiten-games/pkg/scenes"
 	"github.com/joelschutz/stagehand"
 )
 
@@ -20,11 +19,14 @@ func main() {
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
 	state := &gstate.GState{}
-	game := &fourtrees.Game{}
-	if err := resources.DecodeData("fourtrees", game); err != nil {
-		log.Fatal(err)
-	}
-	scnMgr := stagehand.NewSceneDirector[*gstate.GState](game, state, scenerules.Rules)
+	fourtrees := &fourtrees.Game{}
+	exit := &scenes.ExitScene{}
+
+	var rules = map[stagehand.Scene[*gstate.GState]][]stagehand.Directive[*gstate.GState]{
+		fourtrees: {{Trigger: scenes.Exit, Dest: exit}},
+	}	
+	
+	scnMgr := stagehand.NewSceneDirector[*gstate.GState](fourtrees, state, rules)
 
 	if err := ebiten.RunGame(scnMgr); err != nil && !errors.Is(err, gerrors.ErrExitGame) {
 		log.Fatal(err)

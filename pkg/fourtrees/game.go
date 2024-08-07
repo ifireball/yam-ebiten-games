@@ -5,31 +5,35 @@ import (
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/ifireball/yam-ebiten-games/pkg/entities/buttons"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/girl"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
-	"github.com/ifireball/yam-ebiten-games/pkg/gerrors"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
+	"github.com/ifireball/yam-ebiten-games/pkg/gstate"
 	"github.com/ifireball/yam-ebiten-games/pkg/keyboard"
 	"github.com/ifireball/yam-ebiten-games/pkg/scenes"
 	"github.com/ifireball/yam-ebiten-games/resources"
+	"github.com/joelschutz/stagehand"
 )
 
 type Game struct {
 	scenes.Boiler
 	Background *ebiten.Image
-	Girl Girl
-	Fruit Fruit
-	Buttons buttons.Colored
+	Girl       Girl
+	Fruit      Fruit
+	Buttons    buttons.Colored
 }
 
-func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return gdata.ScreenWidth, gdata.ScreenHeight
+func (g *Game) Load(state *gstate.GState, scnDir stagehand.SceneController[*gstate.GState]) {
+	g.Boiler.Load(state, scnDir)
+	if err := resources.DecodeData("fourtrees", g); err != nil {
+		panic(err)
+	}
 }
 
 func (g *Game) Update() error {
 	var err error
+	g.Boiler.Update()
 	if g.Background == nil {
 		g.Background, err = resources.EbitenImageFromSVG("four_trees", gdata.ScreenWidth, gdata.ScreenHeight)
 		if err != nil {
@@ -41,13 +45,6 @@ func (g *Game) Update() error {
 	}
 
 	keyboard.WobeeBlueGreen.Update()
-
-	if inpututil.IsKeyJustReleased(ebiten.KeyEscape)  || keyboard.WobeeBlueGreen.IsJustReleased() {
-		return gerrors.ErrExitGame
-	}
-	if inpututil.IsKeyJustReleased(ebiten.KeyF11) {
-		ebiten.SetFullscreen(!ebiten.IsFullscreen())
-	}
 
 	if err := g.Girl.Update(); err != nil {
 		return err
