@@ -3,8 +3,8 @@ package fourtrees
 import (
 	"fmt"
 
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/ifireball/yam-ebiten-games/pkg/entities/buttons"
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/girl"
@@ -12,10 +12,12 @@ import (
 	"github.com/ifireball/yam-ebiten-games/pkg/gerrors"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/pkg/keyboard"
+	"github.com/ifireball/yam-ebiten-games/pkg/scenes"
 	"github.com/ifireball/yam-ebiten-games/resources"
 )
 
 type Game struct {
+	scenes.Boiler
 	Background *ebiten.Image
 	Girl Girl
 	Fruit Fruit

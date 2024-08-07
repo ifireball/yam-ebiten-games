@@ -4,6 +4,7 @@ go 1.22.4
 
 require (
 	github.com/hajimehoshi/ebiten/v2 v2.7.6
+	github.com/joelschutz/stagehand v1.1.1
 	github.com/tanema/gween v0.0.0-20221212145351-621cc8a459d1
 	github.com/tdewolff/canvas v0.0.0-20240521203133-699cfc271500
 )
