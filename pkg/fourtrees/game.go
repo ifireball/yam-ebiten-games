@@ -10,7 +10,6 @@ import (
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
 	"github.com/ifireball/yam-ebiten-games/pkg/gstate"
-	"github.com/ifireball/yam-ebiten-games/pkg/keyboard"
 	"github.com/ifireball/yam-ebiten-games/pkg/scenes"
 	"github.com/ifireball/yam-ebiten-games/resources"
 	"github.com/joelschutz/stagehand"
@@ -25,26 +24,29 @@ type Game struct {
 }
 
 func (g *Game) Load(state *gstate.GState, scnDir stagehand.SceneController[*gstate.GState]) {
+	var err error
 	g.Boiler.Load(state, scnDir)
-	if err := resources.DecodeData("fourtrees", g); err != nil {
+	if err = resources.DecodeData("fourtrees", g); err != nil {
 		panic(err)
 	}
+	g.Girl.Controller = &girl.WobeeCtrl{Fruit: &g.Fruit}
+	if g.Background, err = resources.EbitenImageFromSVG("four_trees", gdata.ScreenWidth, gdata.ScreenHeight); err != nil {
+		panic(err)
+	}
+	g.Fruit.Load()
+	g.Girl.Load()
+	g.Buttons.Load()
 }
 
 func (g *Game) Update() error {
-	var err error
+	//var err error
 	g.Boiler.Update()
-	if g.Background == nil {
-		g.Background, err = resources.EbitenImageFromSVG("four_trees", gdata.ScreenWidth, gdata.ScreenHeight)
-		if err != nil {
-			return err
-		}
-	}
-	if g.Girl.Controller == nil {
-		g.Girl.Controller = &girl.WobeeCtrl{Fruit: &g.Fruit}
-	}
-
-	keyboard.WobeeBlueGreen.Update()
+	// if g.Background == nil {
+	// 	g.Background, err = resources.EbitenImageFromSVG("four_trees", gdata.ScreenWidth, gdata.ScreenHeight)
+	// 	if err != nil {
+	// 		return err
+	// 	}
+	// }
 
 	if err := g.Girl.Update(); err != nil {
 		return err
@@ -66,7 +68,7 @@ func (g *Game) detectFruitWin() {
 	g.Girl.GetBasketRect(&basketRect)
 	g.Fruit.GetActiveRect(&fruitRect)
 	if fruitRect.Overlap(&basketRect) {
-		fmt.Printf("Caught Fruit!")
+		fmt.Printf("Caught Fruit!\n")
 		g.Fruit.SetActiveWin()
 	}
 }

@@ -21,7 +21,6 @@ type Fruit struct {
 	activeTransform ebiten.GeoM
 	images          fruit.Images
 	sounds			fruit.Sounds
-	initialized     bool
 	activeWin       bool
 }
 
@@ -49,17 +48,18 @@ var (
 	)	
 )
 
-func (f *Fruit) Update() (err error) {
-	if !f.initialized {
-		if err = errors.Join(f.images.Load(), f.sounds.Load()); err != nil {
-			return
-		}
-		f.passive = f.Locations[:len(f.Locations)-1]
-		f.active = &f.Locations[len(f.Locations)-1]
-		f.activeMotion = f.fruitFall(f.active.Position).Run()
+func (f *Fruit) Load() {
+	var err error
 
-		f.initialized = true
+	if err = errors.Join(f.images.Load(), f.sounds.Load()); err != nil {
+		panic(err)
 	}
+	f.passive = f.Locations[:len(f.Locations)-1]
+	f.active = &f.Locations[len(f.Locations)-1]
+	f.activeMotion = f.fruitFall(f.active.Position).Run()
+}
+
+func (f *Fruit) Update() (err error) {
 	if f.active != nil {
 		if !f.activeMotion(&f.activeTransform) {
 			f.activeWin = false

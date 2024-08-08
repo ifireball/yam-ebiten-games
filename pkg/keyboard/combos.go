@@ -32,6 +32,7 @@ func (c *Combo) Update() {
 	case numPressed <= 0:
 		if c.releaseCycles < 0 {
 			c.justReleased = true
+			c.releaseCycles = 0
 		}
 	default:
 		if c.releaseCycles < 0 {

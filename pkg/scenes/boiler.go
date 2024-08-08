@@ -29,7 +29,9 @@ func (sb *Boiler) Unload() *gstate.GState {
 }
 
 func (sb *Boiler) Update() error {
-	if inpututil.IsKeyJustReleased(ebiten.KeyEscape)  || keyboard.WobeeBlueGreen.IsJustReleased() {
+	keyboard.WobeeBlueGreen.Update()
+
+	if inpututil.IsKeyJustReleased(ebiten.KeyEscape) || keyboard.WobeeBlueGreen.IsJustReleased() {
 		sb.ScnDir.ProcessTrigger(Exit)
 	}
 	if inpututil.IsKeyJustReleased(ebiten.KeyF11) {

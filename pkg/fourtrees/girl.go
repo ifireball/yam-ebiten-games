@@ -17,18 +17,17 @@ type Girl struct {
 	sprite   *ebiten.Image
 }
 
-func (g *Girl) Update() error {
+func (g *Girl) Load() {
 	var err error
 	if g.sprite == nil {
-		g.sprite, err = resources.EbitenImageFromSVG("basket_girl", girl.Width, girl.Height)
-		if err != nil {
-			return err
+		if g.sprite, err = resources.EbitenImageFromSVG("basket_girl", girl.Width, girl.Height); err != nil {
+			panic(err)
 		}
 	}
-	if g.position == 0 {
-		g.position = gdata.ScreenWidth / 2
-	}
+	g.position = gdata.ScreenWidth / 2
+}
 
+func (g *Girl) Update() error {
 	g.Controller.Control(&g.position)
 
 	if g.position < girl.MinPosition {

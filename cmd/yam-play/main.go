@@ -19,14 +19,21 @@ func main() {
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 
 	state := &gstate.GState{}
-	fourtrees := &fourtrees.Game{}
+	fourtreesGame := &fourtrees.Game{}
+	fourtreesDemo := &fourtrees.Demo{}
 	exit := &scenes.ExitScene{}
 
 	var rules = map[stagehand.Scene[*gstate.GState]][]stagehand.Directive[*gstate.GState]{
-		fourtrees: {{Trigger: scenes.Exit, Dest: exit}},
-	}	
-	
-	scnMgr := stagehand.NewSceneDirector[*gstate.GState](fourtrees, state, rules)
+		fourtreesDemo: {
+			{Trigger: scenes.Exit, Dest: exit},
+			{Trigger: scenes.Enter, Dest: fourtreesGame},
+		},
+		fourtreesGame: {
+			{Trigger: scenes.Exit, Dest: fourtreesDemo},
+		},
+	}
+
+	scnMgr := stagehand.NewSceneDirector[*gstate.GState](fourtreesDemo, state, rules)
 
 	if err := ebiten.RunGame(scnMgr); err != nil && !errors.Is(err, gerrors.ErrExitGame) {
 		log.Fatal(err)
