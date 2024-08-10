@@ -13,7 +13,7 @@ type ExitScene struct {
 }
 
 func (s *ExitScene) Update() error {
-	fmt.Printf("Exit scene invoked!")
+	fmt.Println("Exit scene invoked!")
 	return gerrors.ErrExitGame
 }
 

@@ -9,21 +9,19 @@ import (
 	"github.com/ifireball/yam-ebiten-games/pkg/fourtrees/girl"
 	"github.com/ifireball/yam-ebiten-games/pkg/gdata"
 	"github.com/ifireball/yam-ebiten-games/pkg/gmath"
-	"github.com/ifireball/yam-ebiten-games/pkg/gstate"
-	"github.com/ifireball/yam-ebiten-games/pkg/scenes"
 	"github.com/ifireball/yam-ebiten-games/resources"
 	"github.com/joelschutz/stagehand"
 )
 
 type Game struct {
-	scenes.Boiler
+	Boiler
 	Background *ebiten.Image
 	Girl       Girl
 	Fruit      Fruit
 	Buttons    buttons.Colored
 }
 
-func (g *Game) Load(state *gstate.GState, scnDir stagehand.SceneController[*gstate.GState]) {
+func (g *Game) Load(state *GState, scnDir stagehand.SceneController[*GState]) {
 	var err error
 	g.Boiler.Load(state, scnDir)
 	if err = resources.DecodeData("fourtrees", g); err != nil {
@@ -39,14 +37,7 @@ func (g *Game) Load(state *gstate.GState, scnDir stagehand.SceneController[*gsta
 }
 
 func (g *Game) Update() error {
-	//var err error
 	g.Boiler.Update()
-	// if g.Background == nil {
-	// 	g.Background, err = resources.EbitenImageFromSVG("four_trees", gdata.ScreenWidth, gdata.ScreenHeight)
-	// 	if err != nil {
-	// 		return err
-	// 	}
-	// }
 
 	if err := g.Girl.Update(); err != nil {
 		return err
