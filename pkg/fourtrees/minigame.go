@@ -17,10 +17,24 @@ type Minigame struct {
 func (mg *Minigame) Load(gState *gstate.GState, gScnDir stagehand.SceneController[*gstate.GState]) {
 	mg.Boiler.Load(gState, gScnDir)
 
+	exit := &scenes.MiniExit[GState]{GScnDir: mg.ScnDir}
+	rules, first := mg.setupRules(exit)
+
+	state := mg.loadState()
+	mg.scnDir = stagehand.NewSceneDirector[*GState](first, state, rules)
+}
+
+func (mg *Minigame) loadState() *GState {
 	state := &GState{}
+	return state	
+}
+
+func (mg *Minigame) setupRules(exit stagehand.Scene[*GState]) (
+	map[stagehand.Scene[*GState]][]stagehand.Directive[*GState],
+	stagehand.Scene[*GState],
+) {
 	game := &Game{}
 	demo := &Demo{}
-	exit := &scenes.MiniExit[GState]{GScnDir: mg.ScnDir}
 
 	var rules = map[stagehand.Scene[*GState]][]stagehand.Directive[*GState]{
 		demo: {
@@ -31,8 +45,7 @@ func (mg *Minigame) Load(gState *gstate.GState, gScnDir stagehand.SceneControlle
 			{Trigger: scenes.Exit, Dest: demo},
 		},
 	}
-
-	mg.scnDir = stagehand.NewSceneDirector[*GState](demo, state, rules)
+	return rules, demo
 }
 
 func (mg *Minigame) Update() error {
