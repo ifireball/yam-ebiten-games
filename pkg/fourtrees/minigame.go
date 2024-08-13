@@ -8,7 +8,7 @@ import (
 )
 
 // Minigame is both a scene and a scene director for the various fourtrees
-// scenes and a scene manage by the program's top-leve scene director
+// scenes and a scene manage by the program's top-lever scene director
 type Minigame struct {
 	scenes.Boiler
 	scnDir *stagehand.SceneDirector[*GState]
@@ -26,7 +26,8 @@ func (mg *Minigame) Load(gState *gstate.GState, gScnDir stagehand.SceneControlle
 
 func (mg *Minigame) loadState() *GState {
 	state := &GState{}
-	return state	
+	state.Load()
+	return state
 }
 
 func (mg *Minigame) setupRules(exit stagehand.Scene[*GState]) (
@@ -55,6 +56,6 @@ func (mg *Minigame) Update() error {
 	return nil
 }
 
-func (mg *Minigame) Draw(screem *ebiten.Image) {
-	mg.scnDir.Draw(screem)
+func (mg *Minigame) Draw(screen *ebiten.Image) {
+	mg.scnDir.Draw(screen)
 }

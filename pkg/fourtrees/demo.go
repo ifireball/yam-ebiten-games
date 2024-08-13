@@ -9,17 +9,17 @@ import (
 )
 
 type Demo struct {
-	Game
+	Boiler
 }
 
 func (d *Demo) Load(state *GState, scnDir stagehand.SceneController[*GState]) {
-	d.Game.Load(state, scnDir)
-	d.Girl.Controller = &girl.AutoCtrl{Fruit: &d.Fruit}
+	d.Boiler.Load(state, scnDir)
+	d.GState.Girl.Controller = &girl.AutoCtrl{Fruit: &d.GState.Fruit}
 }
 
 func (d *Demo) Update() error {
 	if inpututil.IsKeyJustReleased(keyboard.WobeeRed) {
 		d.ScnDir.ProcessTrigger(scenes.Enter)
 	}
-	return d.Game.Update()
+	return d.Boiler.Update()
 }
