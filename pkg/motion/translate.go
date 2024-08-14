@@ -7,13 +7,13 @@ import (
 	"github.com/tanema/gween/ease"
 )
 
-type Trnaslate struct {
+type Translate struct {
 	From, To gmath.Vec2
 	Duration float32
-	Easing ease.TweenFunc
+	Easing   ease.TweenFunc
 }
 
-func (t *Trnaslate) Run() StepFunc {
+func (t *Translate) Run() StepFunc {
 	xt := gween.New(float32(t.From.X), float32(t.To.X), t.Duration, t.Easing)
 	yt := gween.New(float32(t.From.Y), float32(t.To.Y), t.Duration, t.Easing)
 

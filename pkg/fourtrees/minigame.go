@@ -34,16 +34,18 @@ func (mg *Minigame) setupRules(exit stagehand.Scene[*GState]) (
 	map[stagehand.Scene[*GState]][]stagehand.Directive[*GState],
 	stagehand.Scene[*GState],
 ) {
-	game := &Game{}
 	demo := &Demo{}
+	demo_to_game := &DemoGameTrans{Motion: BottomToPosition}
+	game := &Game{}
+	game_to_demo := &DemoGameTrans{Motion: PositionToBottom}
 
 	var rules = map[stagehand.Scene[*GState]][]stagehand.Directive[*GState]{
 		demo: {
 			{Trigger: scenes.Exit, Dest: exit},
-			{Trigger: scenes.Enter, Dest: game},
+			{Trigger: scenes.Enter, Dest: game, Transition: demo_to_game},
 		},
 		game: {
-			{Trigger: scenes.Exit, Dest: demo},
+			{Trigger: scenes.Exit, Dest: demo, Transition: game_to_demo},
 		},
 	}
 	return rules, demo

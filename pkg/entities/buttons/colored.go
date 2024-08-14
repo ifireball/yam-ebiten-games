@@ -19,6 +19,7 @@ const (
 type Colored struct {
 	images      [keyboard.WobeeKeysAmount * 2]*ebiten.Image
 	pressed     [keyboard.WobeeKeysAmount]int8
+	Transform	ebiten.GeoM
 }
 
 func (c *Colored) Load() {
@@ -54,7 +55,7 @@ func (c *Colored) Draw(screen *ebiten.Image) {
 	for i, pressed := range c.pressed {
 		middle := gdata.ScreenWidth * (float64(i) + 1) / (keyboard.WobeeKeysAmount + 1)
 		left := middle - ButtonWidth/2
-		dio.GeoM.Reset()
+		dio.GeoM = c.Transform
 		dio.GeoM.Translate(
 			left,
 			ButtonScreenTop,

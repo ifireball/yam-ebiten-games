@@ -20,7 +20,7 @@ type Fruit struct {
 	activeMotion    motion.StepFunc
 	activeTransform ebiten.GeoM
 	images          fruit.Images
-	sounds			fruit.Sounds
+	sounds          fruit.Sounds
 	activeWin       bool
 }
 
@@ -36,7 +36,7 @@ var (
 		Cycles:     1,
 	}
 	grow = motion.Scale{Duration: 60, To: normalSize, Pivot: fruit.Center, Easing: ease.OutCubic}
-	win = motion.Combine(
+	win  = motion.Combine(
 		&motion.Scale{
 			Pivot:    fruit.Center,
 			From:     normalSize,
@@ -44,8 +44,8 @@ var (
 			Duration: 2.5 * 60,
 			Easing:   ease.OutQuart,
 		},
-		&motion.Trnaslate{To: gmath.Vec2{Y: -fruit.Height}, Duration: 2.5*60, Easing: ease.OutQuart},
-	)	
+		&motion.Translate{To: gmath.Vec2{Y: -fruit.Height}, Duration: 2.5 * 60, Easing: ease.OutQuart},
+	)
 )
 
 func (f *Fruit) Load() {
@@ -93,16 +93,16 @@ func (f *Fruit) fruitFall(from gmath.Vec2) motion.Motion {
 	squished := gmath.Vec2{X: 0.5, Y: 0}
 	fruitBottom := gmath.Vec2{X: fruit.Width / 2, Y: fruit.Height}
 
-	drop := motion.Trnaslate{Duration: 180, To: ground, Easing: ease.OutBounce}
+	drop := motion.Translate{Duration: 180, To: ground, Easing: ease.OutBounce}
 	rot := motion.Combine(
 		&motion.Scale{Duration: 60, From: normalSize, To: squished, Pivot: fruitBottom, Easing: ease.OutCubic},
 		motion.PlaceAt(ground),
 	)
 	return motion.Chain(
-		&f.sounds.Swing, &swing, 
-		&f.sounds.Drop, 
+		&f.sounds.Swing, &swing,
+		&f.sounds.Drop,
 		motion.Combine(&drop, motion.Chain(motion.Pause(60), &f.sounds.Oy, motion.Infinity)),
-		&f.sounds.Rot, &rot, 
+		&f.sounds.Rot, &rot,
 		&f.sounds.Grow, &grow,
 	)
 }
@@ -153,7 +153,7 @@ func (f *Fruit) fruitWin(at gmath.Vec2, kind int) motion.Motion {
 	return motion.Chain(
 		&f.sounds.KindWin[kind],
 		motion.Combine(win, motion.PlaceAt(at)),
-		&f.sounds.Grow, 
+		&f.sounds.Grow,
 		&grow,
 	)
 }
